@@ -17,13 +17,59 @@ export default new Vuex.Store({
     state: {
         loading: false, //used by the UI to determine wheter it should run the CSS loader.
         sending: false,
-        error: null, //Store information of an error that has just occured.
-        user: [],
+        error: 'Relax! This is just a drill error message', //Store information of an error that has just occured.
+        user: {
+            username: 'Bob',
+            name: 'Bobson'
+        },
         reconnect: false,
-        activeRoom: null,
-        rooms: [],
-        users:[],
-        messages: [],
+        activeRoom: {
+            id: '124'
+        },
+        rooms: [
+            {
+                id: '123',
+                name: 'Ships'
+            },
+            {
+                id:'124',
+                name: 'Treasure'
+            }
+        ],
+        users:[
+            {
+                username: 'Bob',
+                name: 'Bobson',
+                presence: 'online'
+            },
+            {
+                username: 'Tim',
+                name: 'Tim Larsson',
+                presence: 'online'
+            },
+            {
+                username: 'Sven',
+                name: 'Svensson',
+                presence: 'offline'
+            }
+        ],
+        messages: [
+            {
+                username: 'Tim',
+                date: '11/12/1999',
+                text: 'It is stranges that i can work with vuejs as a framework when the framework doesent exist in this time period..'
+            },
+            {
+                username: 'Tim',
+                date: '11/11/2019',
+                text: 'Hey! Thay have now created the VUE JS FRAMEWORK! Plz dont say that I already have inventet this framework 20 years before. '
+            },
+            {
+                username: 'Bob',
+                date: '11/12/2019',
+                text: 'Okej, I will not say enything! But the framework sux'
+            }
+        ],
         userTyping: null
     },
     //used to commit and track state changes.

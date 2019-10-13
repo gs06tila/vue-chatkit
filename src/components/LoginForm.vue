@@ -3,7 +3,6 @@
         <div class="text-center">
             <img class="mb-4" src="fly.png" alt="" width="72" height="72">
         </div>
-        <h5 class="text-center">Chat Login</h5>
         <hr>
         <b-form @submit.prevent="onsubmit">
             <b-alert variant="danger" :show="hasError"> {{ error }} </b-alert>
