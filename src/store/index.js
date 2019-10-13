@@ -24,6 +24,11 @@ export default new Vuex.Store({
         rooms: [
         ],
         users:[
+            {
+                username: 'tim',
+                name: 'Tim Larsson',
+                presence: 'online'
+            },
         ],
         messages: [
         ],

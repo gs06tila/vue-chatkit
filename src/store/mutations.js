@@ -17,7 +17,7 @@ export default {
     setRooms(state, rooms) {
         state.rooms = rooms;
     },
-    serUsers(state, users) {
+    setUsers(state, users) {
         state.users = users;
     },
     clearChatRoom(state) {
