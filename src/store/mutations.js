@@ -1,5 +1,5 @@
 export default {
-    serError(state, error) {
+    setError(state, error) {
         state.error = error;
     },
     setLoading(state, loading) {
@@ -41,6 +41,6 @@ export default {
         state.users = [];
         state.messages = [];
         state.rooms = [];
-        state.user = null
+        state.user = null;
     }
 }
