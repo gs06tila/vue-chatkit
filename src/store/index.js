@@ -55,16 +55,19 @@ export default new Vuex.Store({
         ],
         messages: [
             {
+                name: 'Tim Larsson',
                 username: 'Tim',
                 date: '11/12/1999',
                 text: 'It is stranges that i can work with vuejs as a framework when the framework doesent exist in this time period..'
             },
             {
+                name: 'Tim Larson',
                 username: 'Tim',
                 date: '11/11/2019',
                 text: 'Hey! Thay have now created the VUE JS FRAMEWORK! Plz dont say that I already have inventet this framework 20 years before. '
             },
             {
+                name: 'Bob Bobson',
                 username: 'Bob',
                 date: '11/12/2019',
                 text: 'Okej, I will not say enything! But the framework sux'
