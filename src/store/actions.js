@@ -40,5 +40,14 @@ export default {
         } finally {
             commit('setLoading', false);
         }
-    }
+    },
+    //asymc function that will allow users to change rooms
+    async changeRoom({ commit }, roomId) {
+        try {
+            const { id, name } = await chatkit.subscribeToRoom(roomId);
+            commit('setActiveRoom', { id, name });
+        } catch (error) {
+            handleError(commit, error)
+        }
+    },
 }
