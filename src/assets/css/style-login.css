@@ -1,5 +1,5 @@
 .login {
-    background-image: url('https://mdbootstrap.com/img/Photos/Others/images/93.jpg');
+    background-image: url('https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -10,4 +10,8 @@
 .login-form {
     margin-top: 100%;
     transform: translateY(-50%);
+}
+
+.btn {
+    margin-top: 15px;
 }
