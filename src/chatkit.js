@@ -9,59 +9,84 @@ const MESSAGE_LIMIT = Number(process.env.VUE_APP_MESSAGE_LIMIT) || 10;
 let currentUser = null;
 let activeRoom = null;
 
+async function connectUser(userId) {
+  const chatManager = new ChatManager({
+    instanceLocator: INSTANCE_LOCATOR,
+    tokenProvider: new TokenProvider({ url: TOKEN_URL }),
+    userId
+  });
+  currentUser = await chatManager.connect();
+  return currentUser;
+}
+
 function setMembers() {
-    const members = activeRoom.users.map(user => ({
-        username: user.id,
-        name: user.name,
-        presence: user.presence.sate
-    }));
-    store.commit('setUsers', members);
+  const members = activeRoom.users.map(user => ({
+    username: user.id,
+    name: user.name,
+    presence: user.presence.state
+  }));
+  store.commit('setUsers', members);
 }
 
 async function subscribeToRoom(roomId) {
-    store.commit('clearChatRoom');
-    activeRoom = await currentUser.subscribeToRoom({
-        roomId,
-        messageLimit: MESSAGE_LIMIT,
-        hooks: {
-            //To be notified when new messages are added to a room, you’ll need to subscribe to it and provide an onMessage hook
-            onMessage: message => {
-                store.commit('addMessage', {
-                    name: message.sender.name,
-                    username: message.senderId,
-                    text: message.text,
-                    date: moment(message.createdAt).format('h:mm:ss a D-MM-YYYY')
-                });
-            },
-            //Additionally, to be notified when a user comes online or goes offline, you can provide the onPresenceChanged hook.
-            onPresenceChanged: () => {
-                setMembers();
-            },
-            //A user started typing in a room to which the current user is subscribed.
-            onUserStartedTyping: user => {
-                store.commit('setUserTyping', user.id);
-            },
-            //A user stopped typing in a room to which the current user is subscribed.
-            onUserStoppedTyping: () => {
-                store.commit('setUserTyping', null)
-            }
-        }
-    });
-    setMembers();
-    return activeRoom;
+  store.commit('clearChatRoom');
+  activeRoom = await currentUser.subscribeToRoom({
+    roomId,
+    messageLimit: MESSAGE_LIMIT,
+    hooks: {
+      onMessage: message => { //onMessage receives messages
+        store.commit('addMessage', {
+          name: message.sender.name,
+          username: message.senderId,
+          text: message.text,
+          date: moment(message.createdAt).format('h:mm:ss a D-MM-YYYY')
+        });
+      },
+      /* onPresenceChanged receives an event when a user logs in or out */
+      onPresenceChanged: () => {
+        setMembers();
+      },
+      /* onUserStartedTyping receives an event that a user is typing */
+      onUserStartedTyping: user => {
+        store.commit('setUserTyping', user.id)
+      },
+      /* onUserStoppedTyping receives an event that a user has stopped typing */
+      /* For the onUserStartedTyping to work, we need to emit a typing event from our MessageForm while a user is typing. We’ll look into this in the next section. */
+      onUserStoppedTyping: () => {
+        store.commit('setUserTyping', null)
+      }
+    }
+  });
+  setMembers();
+  return activeRoom;
 }
 
-async function connectUser(userId) {
-    const chatManager = new ChatManager({
-        instanceLocator: INSTANCE_LOCATOR,
-        tokenProvider: new TokenProvider({ url: TOKEN_URL}),
-        userId
-    });
-    currentUser = await chatManager.connect();
-    return currentUser;
+async function sendMessage(text) {
+	const messageId = await currentUser.sendMessage({
+		text,
+		roomId: activeRoom.id
+	});
+	return messageId;
+}
+
+export function isTyping(roomId) {
+	currentUser.isTypingIn({ roomId });
+}
+
+function disconnectUser() {
+	currentUser.disconnect();
 }
 
 export default {
-    connectUser,
-    subscribeToRoom
+  connectUser,
+  subscribeToRoom,
+  sendMessage,
+  disconnectUser
 }
+
+/*
+Notice that we’re casting the MESSAGE_LIMIT
+constant to a number, as by default the 
+process.env object forces all of its 
+properties to be of type string.
+*/
